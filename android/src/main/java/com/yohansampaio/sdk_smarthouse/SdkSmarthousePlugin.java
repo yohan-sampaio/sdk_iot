@@ -33,8 +33,8 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
 
   Activity activity;
   private Context context;
-  final String client_id = "5shjnpmfn7a8epxswtsu";
-  final String secretKey = "rdvgmhcq8uh4w9aqepy4m7nhuh399w39";
+  final String client_id = "p3xmfsppye34uynvund7";
+  final String secretKey = "fxedd9aqr4a77ds5hvurru4amn8n9934";
 
 
   @Override
@@ -54,13 +54,7 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("getPlatformVersion")) {
 
-      Application application = activity.getApplication();
-
-
-      TuyaHomeSdk.init(activity.getApplication());
-
-      /*
-      TuyaHomeSdk.getUserInstance().getRegisterEmailValidateCode("86",
+      TuyaHomeSdk.getUserInstance().getRegisterEmailValidateCode("55",
               "yohan.develop@gmail.com", new IResultCallback() {
                 @Override
                 public void onError(String code, String error) {
@@ -69,10 +63,9 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
 
                 @Override
                 public void onSuccess() {
-                  System.out.println("foi caraio");
+                  System.out.println("deu boa");
                 }
               });
-     */
 
 
     } else {
@@ -88,7 +81,8 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     activity = binding.getActivity();
-    System.out.println(activity.getApplication().getApplicationInfo());
+    TuyaHomeSdk.init(activity.getApplication(), client_id, secretKey);
+    TuyaHomeSdk.setDebugMode(true);
   }
 
   @Override
@@ -98,7 +92,6 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
 
   @Override
   public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-    this.activity = binding.getActivity();
   }
 
   @Override
