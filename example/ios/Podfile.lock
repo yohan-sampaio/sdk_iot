@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - sdk_smarthouse (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - sdk_smarthouse (from `.symlinks/plugins/sdk_smarthouse/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  sdk_smarthouse:
+    :path: ".symlinks/plugins/sdk_smarthouse/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  sdk_smarthouse: f332f51f0b3003d7d7539efe18050b5e08858733
+
+PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+
+COCOAPODS: 1.8.4
