@@ -1,4 +1,4 @@
-package com.yohansampaio.sdk_smarthouse;
+package com.yohansampaio.sdk_smarthouse.TuyaPackage;
 
 import android.app.ActivityManager;
 import android.app.Application;
