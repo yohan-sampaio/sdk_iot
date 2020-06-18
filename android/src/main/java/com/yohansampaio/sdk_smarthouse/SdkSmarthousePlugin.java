@@ -12,8 +12,10 @@ import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.sdk.api.INeedLoginListener;
 import com.tuya.smart.sdk.api.IResultCallback;
-import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaInit;
+import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaHome;
+import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaRegister;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.flutter.Log;
@@ -37,12 +39,22 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
         , ActivityAware {
 
     private MethodChannel channel;
-    private TuyaInit tuyaInit = new TuyaInit();
-
-    Activity activity;
+    private TuyaRegister tuyaRegister = new TuyaRegister();
     private Context context;
+    private TuyaHome tuyaHome = new TuyaHome();
     final String client_id = "p3xmfsppye34uynvund7";
     final String secretKey = "fxedd9aqr4a77ds5hvurru4amn8n9934";
+    Activity activity;
+    String validateCode = "";
+    String email = "";
+    String countryCode = "";
+    String password = "";
+    String nameHome = "";
+    String geoNomeHome = "";
+    double lonHome = 0;
+    double latHome = 0;
+    List<String> roomsHome;
+
 
 
     @Override
@@ -63,89 +75,84 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
         switch (call.method) {
 
             case "initTuya":
+                final HashMap<String, String> resulInit = new HashMap<>();
                 try {
                     TuyaHomeSdk.init(activity.getApplication(), client_id, secretKey);
                     TuyaHomeSdk.setDebugMode(true);
-                    result.success("ok");
+                    resulInit.put("code", "200");
+                    resulInit.put("mensage", "sucess");
                 } catch (Exception e) {
-                    result.error("104", e.getMessage(), "");
+                    resulInit.put("code", "100");
+                    resulInit.put("mensage", e.toString());
+                    Log.d(TAG, e.toString());
                 }
 
                 break;
             case "destroyTuya":
                 TuyaHomeSdk.onDestroy();
-              break;
+                break;
+
+
+            case "getRegisterCode":
+                email = call.argument("email");
+                countryCode = call.argument("countryCode");
+
+                HashMap<String, String> resultRegisterCode
+                        = tuyaRegister.GetRegisterCode(countryCode, email);
+                result.success(resultRegisterCode);
+                break;
 
 
             case "createAccount":
-                TuyaHomeSdk.getUserInstance().getRegisterEmailValidateCode("55",
-                        "yohan.develop@gmail.com", new IResultCallback() {
-                            @Override
-                            public void onError(String code, String error) {
-                                System.out.println(error);
-                            }
+                validateCode = call.argument("codeValidate");
+                email = call.argument("email");
+                countryCode = call.argument("countryCode");
+                password = call.argument("password");
 
-                            @Override
-                            public void onSuccess() {
-                                System.out.println("deu boa");
-                            }
-                        });
+                HashMap<String, String> resultCreatAccount
+                        = tuyaRegister.CreateAccount(countryCode, email, password, validateCode);
+                result.success(resultCreatAccount);
                 break;
 
 
-            case "validateCode":
-                final String validateCode = call.argument("codeValidate");
-                final String email = call.argument("email");
-                final String countryCode = call.argument("countryCode");
-                final String password = call.argument("password");
+            case "needLogin":
+                TuyaHomeSdk.setOnNeedLoginListener(new INeedLoginListener() {
+                    boolean isNeedLogin;
 
-                try {
-                  TuyaHomeSdk.getUserInstance().registerAccountWithEmail(countryCode,
-                          email, password, validateCode, new IRegisterCallback() {
-                            @Override
-                            public void onSuccess(User user) {
-                              result.success("Email validado.");
-                            }
+                    @Override
+                    public void onNeedLogin(Context context) {
 
-                            @Override
-                            public void onError(String code, String error) {
-                              result.error(code, error, "");
-                            }
-                          });
-                }catch (Exception e){
-                  result.error("ErrValidate", e.toString(), "");
-                  Log.d(TAG, e.toString());
-                }
+                    }
+                });
+
+                break;
+
+            case "getHomeManager":
+
+                HashMap<String, String> resultHomeInstance = tuyaHome.getHomeInstance();
+                result.success(resultHomeInstance);
+                break;
+
+            case "getUid":
+                String uid = tuyaRegister.GetUui();
+                System.out.println(uid);
+                result.success(uid);
+                break;
+
+            case "createHome":
+                nameHome = call.argument("nameHome");
+                lonHome = call.argument("lonHome");
+                latHome = call.argument("latHome");
+                geoNomeHome = call.argument("geoNomeHome");
+                roomsHome = call.argument("roomsHome");
+                HashMap<String, String> resultHomeCreate = tuyaHome.createHome(nameHome, lonHome
+                        ,latHome,geoNomeHome, roomsHome);
+                result.success(resultHomeCreate);
                 break;
 
 
-          case "needLogin":
-            TuyaHomeSdk.setOnNeedLoginListener(new INeedLoginListener() {
-              boolean isNeedLogin;
-              @Override
-              public void onNeedLogin(Context context) {
 
-              }
-            });
-
-            break;
-
-          case "getHomeManager":
-            TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {
-              @Override
-              public void onSuccess(List<HomeBean> homeBeans) {
-                System.out.println("Home" + homeBeans.toString());
-              }
-
-              @Override
-              public void onError(String errorCode, String error) {
-                System.out.println(error);
-              }
-            });
-
-            break;
-
-          default:
+            default:
                 result.notImplemented();
         }
     }

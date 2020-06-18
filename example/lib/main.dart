@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:sdk_smarthouse/sdk_smarthouse.dart';
+import 'package:sdk_smarthouse_example/home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +35,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       //platformVersion = await SdkSmarthouse.platformVersion;
-      await SdkSmarthouse.initTuya;
+      await SdkSmarthouse.initTuya("p3xmfsppye34uynvund7", "fxedd9aqr4a77ds5hvurru4amn8n9934");
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -56,7 +57,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Column(children: [
+        body: SingleChildScrollView(
+          child: Column(
+          children: [
           Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
@@ -74,10 +77,10 @@ class _MyAppState extends State<MyApp> {
             width: 220,
             padding: EdgeInsets.all(10),
             child: RaisedButton(
-              child: Text("Cadastrar"),
+              child: Text("Registrar email"),
                 onPressed: () async {
                   if(_emailController.text.isNotEmpty){
-                   await SdkSmarthouse.createAccount(_emailController.text, "55");
+                   await SdkSmarthouse.getRegisterCode(_emailController.text, "55");
                   }
                 },
             ),),
@@ -111,7 +114,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text("Cadastrar"),
                     onPressed: () async {
                       if(_emailController.text.isNotEmpty && _validateCodeController.text.isNotEmpty && _passwordController.text.isNotEmpty){
-                      await SdkSmarthouse.validateCode(_validateCodeController.text, 
+                      await SdkSmarthouse.createAccount(_validateCodeController.text, 
                       _emailController.text, 
                       "55", 
                       _passwordController.text);
@@ -126,13 +129,14 @@ class _MyAppState extends State<MyApp> {
                 padding: EdgeInsets.all(10),
                 child: RaisedButton(
                   color: Colors.amber,
-                  child: Text("Cadastrar"),
+                  child: Text("Consultar Casa"),
                     onPressed: () async {
-                      await SdkSmarthouse.homeInstance;
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeCreate()));
                     },
                 ),),
             )
         ],),
+        )
       ),
     );
   }
