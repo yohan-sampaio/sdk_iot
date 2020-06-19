@@ -132,10 +132,23 @@ class _MyAppState extends State<MyApp> {
                       await SdkSmarthouse.homeInstance;
                       await SdkSmarthouse.configNetWork("ALHN-A733", "8296063960");
                       
-                      //Navigator.push(context, MaterialPageRoute( builder: (context) => WifiScreen()));
+                      
                     },
                 ),),
-            )
+            ),
+            SizedBox(
+              height: 60,
+              width: 280,
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: RaisedButton(
+                  color: Colors.green,
+                  child: Text("Interagir com Dispositivo"),
+                    onPressed: () async {
+                      Navigator.push(context, MaterialPageRoute( builder: (context) => WifiScreen()));
+                    },
+                ),),
+            ),
         ],),
         )
       ),

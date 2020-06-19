@@ -67,11 +67,27 @@ class SdkSmarthouse {
     return result;
   }
 
-    static Future<Map<dynamic,dynamic>>  configNetWork(String ssid, String passwordNetwork) async {
+  static Future<Map<dynamic,dynamic>>  configNetWork(String ssid, String passwordNetwork) async {
     final Map<dynamic,dynamic> result = await _channel.invokeMethod('searchDevices',
     {
       "ssid" : ssid,
       "passwordNetwork" : passwordNetwork,
+    });
+    return result;
+  }
+
+  static Future<Map<dynamic,dynamic>> turnOnLamp(String devId) async {
+    final Map<dynamic,dynamic> result = await _channel.invokeMethod('turnOnLamp',
+    {
+      "devId" : devId
+    });
+    return result;
+  }
+
+  static Future<Map<dynamic,dynamic>> turnOffLamp(String devId) async {
+    final Map<dynamic,dynamic> result = await _channel.invokeMethod('turnOffLamp',
+    {
+      "devId" : devId
     });
     return result;
   }

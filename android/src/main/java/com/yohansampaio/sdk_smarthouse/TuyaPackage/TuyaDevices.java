@@ -3,15 +3,21 @@ package com.yohansampaio.sdk_smarthouse.TuyaPackage;
 import android.content.Context;
 
 import com.tuya.smart.home.sdk.TuyaHomeSdk;
+import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.builder.ActivatorBuilder;
+import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
+import com.tuya.smart.sdk.api.IResultCallback;
 import com.tuya.smart.sdk.api.ITuyaActivator;
 import com.tuya.smart.sdk.api.ITuyaActivatorCreateToken;
 import com.tuya.smart.sdk.api.ITuyaActivatorGetToken;
+import com.tuya.smart.sdk.api.ITuyaDevice;
 import com.tuya.smart.sdk.api.ITuyaSmartActivatorListener;
 import com.tuya.smart.sdk.bean.DeviceBean;
 import com.tuya.smart.sdk.enums.ActivatorModelEnum;
+import com.tuya.smart.sdk.enums.TYDevicePublishModeEnum;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +67,9 @@ public class TuyaDevices {
 
                         result.put("code", "200");
                         result.put("result", "sucess");
-                        System.out.println("Sucesso aqui");
+                        System.out.println("Id do dispositivo" + devResp.devId);
+
+
                     }
 
                     @Override
@@ -87,5 +95,46 @@ public class TuyaDevices {
         return result;
     }
 
+    public void turnOnLamp(String devId){
+        ITuyaDevice device = TuyaHomeSdk.newDeviceInstance(devId);
+        device.publishDps("{\"101\": true}", new IResultCallback() {
+            @Override
+            public void onError(String code, String error) {
+
+            }
+            @Override
+            public void onSuccess() {
+
+            }
+        });
+    }
+
+    public void turnOffLamp(final String devId, long homeId){
+        TuyaHomeSdk.newHomeInstance(18765421).getHomeDetail(new ITuyaHomeResultCallback() {
+            @Override
+            public void onSuccess(HomeBean bean) {
+
+                List<DeviceBean> devices = bean.getDeviceList();
+
+                ITuyaDevice device =  TuyaHomeSdk.newDeviceInstance(devId);
+                device.publishDps("{\"101\": false}", new IResultCallback() {
+                    @Override
+                    public void onError(String code, String error) {
+
+                    }
+                    @Override
+                    public void onSuccess() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+
+            }
+        });
+
+    }
 
 }

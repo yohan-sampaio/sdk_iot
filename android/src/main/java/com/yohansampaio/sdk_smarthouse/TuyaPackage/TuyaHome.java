@@ -5,6 +5,7 @@ import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.bean.RoomBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.home.sdk.callback.ITuyaHomeResultCallback;
+import com.tuya.smart.sdk.bean.DeviceBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,22 @@ public class TuyaHome {
                 System.out.println(errorMsg);
                 result.put("codeResult", errorCode);
                 result.put("result", errorMsg);
+            }
+        });
+        return result;
+    }
+
+    public HashMap<String, String> getHomeDetail(long homeId){
+        final HashMap<String, String> result = new HashMap<>();
+        TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+            @Override
+            public void onSuccess(HomeBean bean) {
+                List<DeviceBean> devices = bean.getDeviceList();
+            }
+
+            @Override
+            public void onError(String errorCode, String errorMsg) {
+
             }
         });
         return result;

@@ -55,6 +55,7 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
     String geoNomeHome = "";
     String ssid = "";
     String passwordNetwork = "";
+    String deviId = "";
     double lonHome = 0;
     double latHome = 0;
     List<String> roomsHome;
@@ -165,6 +166,16 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
                 String token = resultToken.get("result");
                 System.out.println(code + " token: " + token);
 
+                break;
+
+            case "turnOnLamp":
+                deviId = call.argument("deviId");
+                tuyaDevices.turnOnLamp(deviId);
+                break;
+
+            case "turnOffLamp":
+                deviId = call.argument("deviId");
+                tuyaDevices.turnOffLamp(deviId, 0);
                 break;
 
             default:
