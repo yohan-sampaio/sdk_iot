@@ -4,9 +4,12 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:sdk_smarthouse/sdk_smarthouse.dart';
 import 'package:sdk_smarthouse_example/home_screen.dart';
+import 'package:sdk_smarthouse_example/wifi_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -32,17 +35,12 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      //platformVersion = await SdkSmarthouse.platformVersion;
       await SdkSmarthouse.initTuya("p3xmfsppye34uynvund7", "fxedd9aqr4a77ds5hvurru4amn8n9934");
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
@@ -129,9 +127,12 @@ class _MyAppState extends State<MyApp> {
                 padding: EdgeInsets.all(10),
                 child: RaisedButton(
                   color: Colors.amber,
-                  child: Text("Consultar Casa"),
+                  child: Text("Consultar dispositivos"),
                     onPressed: () async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeCreate()));
+                      await SdkSmarthouse.homeInstance;
+                      await SdkSmarthouse.configNetWork("ALHN-A733", "8296063960");
+                      
+                      //Navigator.push(context, MaterialPageRoute( builder: (context) => WifiScreen()));
                     },
                 ),),
             )

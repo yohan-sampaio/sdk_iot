@@ -55,14 +55,23 @@ class SdkSmarthouse {
     return result;
   }
 
-  static Future<String>  createHome(String nameHome, String geoNameHome
+  static Future<Map<dynamic,dynamic>>  createHome(String nameHome, String geoNameHome
       , double lonHome, double latHome, List<String> roomsHome) async {
-    final String result = await _channel.invokeMethod('createHome',
+    final Map<dynamic,dynamic> result = await _channel.invokeMethod('createHome',
     {
       "nameHome" : nameHome,
       "latHome" : latHome,
       "lonHome" : lonHome,
       "roomsHome" : roomsHome
+    });
+    return result;
+  }
+
+    static Future<Map<dynamic,dynamic>>  configNetWork(String ssid, String passwordNetwork) async {
+    final Map<dynamic,dynamic> result = await _channel.invokeMethod('searchDevices',
+    {
+      "ssid" : ssid,
+      "passwordNetwork" : passwordNetwork,
     });
     return result;
   }

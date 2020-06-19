@@ -16,7 +16,7 @@ public class TuyaHome {
         TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {
             @Override
             public void onSuccess(List<HomeBean> homeBeans) {
-                System.out.println("Home" + homeBeans.toString());
+                System.out.println("HOME " + homeBeans.toString());
                 result.put("codeResult", "200");
                 result.put("result", homeBeans.toString());
             }

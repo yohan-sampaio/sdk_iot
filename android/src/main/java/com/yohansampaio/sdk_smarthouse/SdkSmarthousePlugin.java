@@ -12,6 +12,7 @@ import com.tuya.smart.home.sdk.bean.HomeBean;
 import com.tuya.smart.home.sdk.callback.ITuyaGetHomeListCallback;
 import com.tuya.smart.sdk.api.INeedLoginListener;
 import com.tuya.smart.sdk.api.IResultCallback;
+import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaDevices;
 import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaHome;
 import com.yohansampaio.sdk_smarthouse.TuyaPackage.TuyaRegister;
 
@@ -40,8 +41,9 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
 
     private MethodChannel channel;
     private TuyaRegister tuyaRegister = new TuyaRegister();
-    private Context context;
     private TuyaHome tuyaHome = new TuyaHome();
+    private TuyaDevices tuyaDevices = new TuyaDevices();
+    private Context context;
     final String client_id = "p3xmfsppye34uynvund7";
     final String secretKey = "fxedd9aqr4a77ds5hvurru4amn8n9934";
     Activity activity;
@@ -51,6 +53,8 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
     String password = "";
     String nameHome = "";
     String geoNomeHome = "";
+    String ssid = "";
+    String passwordNetwork = "";
     double lonHome = 0;
     double latHome = 0;
     List<String> roomsHome;
@@ -150,7 +154,18 @@ public class SdkSmarthousePlugin extends FlutterApplication implements FlutterPl
                 result.success(resultHomeCreate);
                 break;
 
+            case "searchDevices":
+                ssid = call.argument("ssid");
+                passwordNetwork = call.argument("passwordNetwork");
 
+                HashMap<String, String> resultToken = tuyaDevices
+                        .getTokenNetwork(context, ssid, passwordNetwork);
+
+                String code = resultToken.get("code");
+                String token = resultToken.get("result");
+                System.out.println(code + " token: " + token);
+
+                break;
 
             default:
                 result.notImplemented();
